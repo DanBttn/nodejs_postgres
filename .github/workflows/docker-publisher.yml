@@ -42,4 +42,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            whoami
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/my-app-backend:latest
+            docker stop my-app-backend || true
+            docker rm my-app-backend || true
+            docker run -d --name my-app-backend -p 3000:3000 ${{ secrets.DOCKER_HUB_USERNAME }}/my-app-backend:latest
