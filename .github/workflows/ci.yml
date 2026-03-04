@@ -22,6 +22,8 @@ jobs:
 
       - name: compose up containers
         run: docker compose up -d
+        name: wait
+        run: sleep 10
 
       - name: Test API
         run: curl localhost:3000/api
