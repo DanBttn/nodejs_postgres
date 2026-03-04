@@ -42,6 +42,8 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            name: logger sur le compte docker hub  
+            echo ${{ secrets.DOCKER_HUB_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin   
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/my-app-backend:latest
             docker stop my-app-backend || true
             docker rm my-app-backend || true
