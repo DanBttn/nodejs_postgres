@@ -2,12 +2,12 @@ name: Build and Push to Docker Hub
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -30,7 +30,7 @@ jobs:
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/my-app-backend:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          
+
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
@@ -42,9 +42,8 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            name: logger sur le compte docker hub  
             echo ${{ secrets.DOCKER_HUB_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin   
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/my-app-backend:latest
-            docker stop my-app-backend || true
+            docker stop my-app-backend || true                                   
             docker rm my-app-backend || true
             docker run -d --name my-app-backend -p 3000:3000 ${{ secrets.DOCKER_HUB_USERNAME }}/my-app-backend:latest
